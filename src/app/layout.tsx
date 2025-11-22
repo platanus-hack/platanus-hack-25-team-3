@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { Header } from '@/components/layout/header';
-import { UploadButton } from '@/components/upload-button';
 
 export const metadata: Metadata = {
   title: 'Kippu Tales',
@@ -34,7 +33,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
         </div>
         <Toaster />
-        <UploadButton />
+        
       </body>
     </html>
   );
