@@ -63,19 +63,9 @@ export function Header() {
           </span>
         </Link>
 
-        {desktopNav}
 
-        <div className="md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">{mobileNav}</SheetContent>
-          </Sheet>
-        </div>
+
+
       </div>
     </header>
   );

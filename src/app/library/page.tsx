@@ -51,7 +51,7 @@ export default function LibraryPage() {
       <div className="container mx-auto max-w-6xl p-4 md:p-8">
         <div className="relative mb-8 h-48 w-full overflow-hidden rounded-2xl md:h-64">
           <Image
-            src="https://picsum.photos/seed/library-banner/1200/400"
+            src="/img/biblioteca.png"
             alt="Banner de la biblioteca de cuentos"
             fill
             className="object-cover"
