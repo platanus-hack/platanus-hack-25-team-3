@@ -1,0 +1,258 @@
+{
+  "meta": {
+    "source_pdf": "cuento_infantil.pdf",
+    "num_paragraphs": 102,
+    "num_sections": 5,
+    "main_character": "El gato"
+  },
+  "characters": [
+    {
+      "name": "Gato con botas",
+      "role": "protagonist",
+      "alignment": "good",
+      "mentions": 1,
+      "sections_involved": [
+        0
+      ]
+    },
+    {
+      "name": "Tres hijos del molinero",
+      "role": "sidekick",
+      "alignment": "good",
+      "mentions": 1,
+      "sections_involved": [
+        0
+      ]
+    },
+    {
+      "name": "Hermano mayor",
+      "role": "npc",
+      "alignment": "neutral",
+      "mentions": 1,
+      "sections_involved": [
+        1
+      ]
+    },
+    {
+      "name": "Hermano segundo",
+      "role": "npc",
+      "alignment": "neutral",
+      "mentions": 1,
+      "sections_involved": [
+        1
+      ]
+    },
+    {
+      "name": "Hermano menor",
+      "role": "protagonist",
+      "alignment": "good",
+      "mentions": 1,
+      "sections_involved": [
+        1
+      ]
+    },
+    {
+      "name": "Gato",
+      "role": "sidekick",
+      "alignment": "good",
+      "mentions": 1,
+      "sections_involved": [
+        1
+      ]
+    },
+    {
+      "name": "El gato",
+      "role": "protagonist",
+      "alignment": "good",
+      "mentions": 2,
+      "sections_involved": [
+        2,
+        3
+      ]
+    },
+    {
+      "name": "El amo del gato",
+      "role": "protagonist",
+      "alignment": "good",
+      "mentions": 1,
+      "sections_involved": [
+        2
+      ]
+    },
+    {
+      "name": "maestro conejo",
+      "role": "protagonist",
+      "alignment": "good",
+      "mentions": 1,
+      "sections_involved": [
+        4
+      ]
+    },
+    {
+      "name": "conejillo atolondrado",
+      "role": "npc",
+      "alignment": "neutral",
+      "mentions": 1,
+      "sections_involved": [
+        4
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "id": 0,
+      "start_paragraph": 0,
+      "end_paragraph": 3,
+      "text": "El gato con botas Charles Perrault Recursos de dominio público\nCharles Perrault EL GATO CON BOTAS Charles Perrault (1628 - 1703)\nImagen de dominio público. Fuente: http://es.wikipedia.org/wiki/Archivo:Lechatbotte1.jpg\nEL GATO CON BOTAS Un molinero dejó como única herencia a sus tres hijos, su molino, su burro y su gato. El",
+      "summary": "Ayuda al gato con botas a usar su ingenio para mejorar la vida de sus dueños.",
+      "characters": [
+        {
+          "name": "Gato con botas",
+          "role": "protagonist",
+          "alignment": "good"
+        },
+        {
+          "name": "Tres hijos del molinero",
+          "role": "sidekick",
+          "alignment": "good"
+        }
+      ],
+      "locations": [
+        "molino",
+        "casa del molinero"
+      ],
+      "items": [
+        "molino",
+        "burro",
+        "botas del gato"
+      ],
+      "goals": "El gato debe ayudar a sus dueños a prosperar usando su astucia.",
+      "conflict": "La herencia limitada hace difícil que los hijos puedan vivir bien.",
+      "tension_level": 0.3
+    },
+    {
+      "id": 1,
+      "start_paragraph": 4,
+      "end_paragraph": 7,
+      "text": "reparto fue bien simple: no se necesitó llamar ni al abogado ni al notario. Habrían consumido\ntodo el pobre patrimonio. El mayor recibió el molino, el segundo se quedó con el burro, y al menor le tocó sólo el gato.\nEste se lamentaba de su mísera herencia: —Mis hermanos, decía, podrán ganarse la vida convenientemente trabajando juntos; lo que es\nyo, después de comerme a mi gato y de hacerme un manguito con su piel, me moriré de",
+      "summary": "El hermano menor recibe solo un gato y se siente triste por su pequeña herencia.",
+      "characters": [
+        {
+          "name": "Hermano mayor",
+          "role": "npc",
+          "alignment": "neutral"
+        },
+        {
+          "name": "Hermano segundo",
+          "role": "npc",
+          "alignment": "neutral"
+        },
+        {
+          "name": "Hermano menor",
+          "role": "protagonist",
+          "alignment": "good"
+        },
+        {
+          "name": "Gato",
+          "role": "sidekick",
+          "alignment": "good"
+        }
+      ],
+      "locations": [
+        "herencia familiar"
+      ],
+      "items": [
+        "molino",
+        "burro",
+        "gato"
+      ],
+      "goals": "El hermano menor quiere encontrar una forma de mejorar su vida con solo el gato.",
+      "conflict": "El hermano menor tiene una herencia pequeña y se siente desesperanzado.",
+      "tension_level": 0.4
+    },
+    {
+      "id": 2,
+      "start_paragraph": 8,
+      "end_paragraph": 11,
+      "text": "hambre. El gato, que escuchaba estas palabras, pero se hacía el desentendido, le dijo en tono serio y\npausado: —No debéis afligiros, mi señor, no tenéis más que proporcionarme una bolsa y un par de\nbotas para andar por entre los matorrales, y veréis que vuestra herencia no es tan pobre como\npensáis. Aunque el amo del gato no abrigara sobre esto grandes ilusiones, le había visto dar tantas",
+      "summary": "El gato ofrece ayudar a su amo a encontrar una herencia escondida usando una bolsa y botas para explorar.",
+      "characters": [
+        {
+          "name": "El gato",
+          "role": "sidekick",
+          "alignment": "good"
+        },
+        {
+          "name": "El amo del gato",
+          "role": "protagonist",
+          "alignment": "good"
+        }
+      ],
+      "locations": [
+        "matorrales"
+      ],
+      "items": [
+        "bolsa",
+        "botas"
+      ],
+      "goals": "Encontrar la herencia escondida en los matorrales",
+      "conflict": "El amo duda de la existencia de la herencia y debe superar su desilusión para buscarla",
+      "tension_level": 0.3
+    },
+    {
+      "id": 3,
+      "start_paragraph": 12,
+      "end_paragraph": 15,
+      "text": "muestras de agilidad para cazar ratas y ratones, como colgarse de los pies o esconderse en la\nharina para hacerse el muerto, que no desesperó de verse socorrido por él en su miseria.\nCuando el gato tuvo lo que había pedido, se colocó las botas y echándose la bolsa al cuello,\nsujetó los cordones de ésta con las dos patas delanteras, y se dirigió a un campo donde había",
+      "summary": "El gato astuto se prepara para una aventura en el campo usando sus botas mágicas y una bolsa especial.",
+      "characters": [
+        {
+          "name": "El gato",
+          "role": "protagonist",
+          "alignment": "good"
+        }
+      ],
+      "locations": [
+        "campo",
+        "casa con harina"
+      ],
+      "items": [
+        "botas",
+        "bolsa"
+      ],
+      "goals": "El gato quiere usar sus habilidades y objetos para cazar y ayudar a su dueño.",
+      "conflict": "El gato debe usar su ingenio para cazar ratones y superar obstáculos en el campo.",
+      "tension_level": 0.3
+    },
+    {
+      "id": 4,
+      "start_paragraph": 16,
+      "end_paragraph": 19,
+      "text": "muchos conejos. Puso afrecho y hierbas en su saco y tendiéndose en el suelo como si\nestuviese muerto, aguardó a que algún conejillo, poco conocedor aún de las astucias de este\nmundo, viniera a meter su hocico en la bolsa para comer lo que había dentro. No bien se hubo\nrecostado, cuando se vio satisfecho. Un atolondrado conejillo se metió en el saco y el maestro",
+      "summary": "El maestro conejo usa un saco con afrecho y hierbas para atrapar a un conejillo curioso.",
+      "characters": [
+        {
+          "name": "maestro conejo",
+          "role": "protagonist",
+          "alignment": "good"
+        },
+        {
+          "name": "conejillo atolondrado",
+          "role": "npc",
+          "alignment": "neutral"
+        }
+      ],
+      "locations": [
+        "campo con muchos conejos"
+      ],
+      "items": [
+        "saco",
+        "afrecho",
+        "hierbas"
+      ],
+      "goals": "capturar al conejillo para enseñarle una lección",
+      "conflict": "el conejillo es muy desconfiado y difícil de atrapar",
+      "tension_level": 0.4
+    }
+  ]
+}
