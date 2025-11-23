@@ -67,7 +67,7 @@ export default function LibraryPage() {
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4"> {/* Añadido padding */}
             <h1 className="text-3xl font-bold md:text-5xl drop-shadow-lg"> {/* Ajuste de tamaño y sombra de texto */}
-              Kippu Cuentos
+              Cuenti
             </h1>
             <p className="mt-2 text-lg md:text-xl drop-shadow-md">
               Un mundo de aventuras te espera
