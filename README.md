@@ -1,9 +1,3 @@
-# Firebase Studio
-
-This is a NextJS starter in Firebase Studio.
-
-To get started, take a look at src/app/page.tsx.
-
 # team-3 Platanus Hack Project
 
 <img src="./logo-cuenti.png" alt="Project Logo" width="200" />
