@@ -1,4 +1,5 @@
 {
   "project-name": "CUANTI",
   "project-description-spanish": "Cuenti es una plataforma que transforma cuentos infantiles en videojuegos mediante IA, extrayendo personajes, objetos, escenarios y misiones directamente del texto. Reinventa la forma tradicional de leer al convertir historias en aventuras interactivas, generando un impacto legacy al proponer un nuevo modelo educativo que integra lectura y juego para incentivar el hábito lector en niños de manera duradera."
+  "deploy-url": "https://platanus-team-3.vercel.app/"
 }
