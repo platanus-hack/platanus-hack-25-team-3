@@ -1,0 +1,46 @@
+{
+  "placeholderImages": [
+    {
+      "id": "kiddie-hero",
+      "description": "Two young children playing with colorful block toys on the floor.",
+      "imageUrl": "/img/img2.png",
+      "imageHint": "children playing toys"
+    },
+    {
+      "id": "treasure-chest-empty",
+      "description": "An empty wooden treasure chest with its lid open.",
+      "imageUrl": "https://images.unsplash.com/photo-1613738053817-7f0983aa456d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlbXB0eSUyMHRyZWFzdXJlJTIwY2hlc3R8ZW58MHx8fHwxNzYzODQzNjU1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "empty treasure chest"
+    },
+    {
+      "id": "treasure-chest-filling",
+      "description": "A wooden treasure chest being filled with gold coins and jewels.",
+      "imageUrl": "https://images.unsplash.com/photo-1763571588783-9f21962b34e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cmVhc3VyZSUyMGNoZXN0JTIwY29pbnN8ZW58MHx8fHwxNzYzODQzNDM3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "treasure chest coins"
+    },
+    {
+      "id": "treasure-chest-full",
+      "description": "A wooden treasure chest overflowing with gold coins, jewels, and other treasures.",
+      "imageUrl": "https://images.unsplash.com/photo-1757032638934-88d6b92ed775?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxmdWxsJTIwdHJlYXN1cmUlMjBjaGVzdHxlbnwwfHx8fDE3NjM4NDM2NTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "full treasure chest"
+    },
+    {
+      "id": "chapter-icon-1",
+      "description": "An open book with a castle popping out of it.",
+      "imageUrl": "https://images.unsplash.com/photo-1505159940484-eb2b9f2588e2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYW50YXN5JTIwY2FzdGxlfGVufDB8fHx8MTc2MzgyMzYwOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fantasy castle"
+    },
+    {
+      "id": "chapter-icon-2",
+      "description": "A compass pointing north on an old map.",
+      "imageUrl": "https://images.unsplash.com/photo-1497302347632-904729bc24aa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxhZHZlbnR1cmUlMjBtYXB8ZW58MHx8fHwxNzYzNzU1NjQ3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "adventure map"
+    },
+    {
+      "id": "chapter-icon-3",
+      "description": "A key unlocking a glowing keyhole.",
+      "imageUrl": "https://images.unsplash.com/photo-1624370474388-db84e6e763a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtYWdpYyUyMGtleXxlbnwwfHx8fDE3NjM4NDQyNTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "magic key"
+    }
+  ]
+}
