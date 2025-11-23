@@ -179,11 +179,21 @@ export function UploadButton() {
       }
 
       // Obtener los resultados de ambas llamadas
-      const { asset_urls } = await assetResponse.json();
+      const assetData = await assetResponse.json();
       const dslData = await dslResponse.json();
+
+      console.log('=== ASSET RESPONSE ===');
+      console.log(JSON.stringify(assetData, null, 2));
+
+      console.log('=== DSL RESPONSE ===');
+      console.log(JSON.stringify(dslData, null, 2));
+
+      const asset_urls = assetData.asset_urls;
       const gameDsl = dslData.game_json; // Extract game_json from response
 
-      console.log({ asset_urls, gameDsl })
+      console.log('=== EXTRACTED DATA ===');
+      console.log('Asset URLs:', JSON.stringify(asset_urls, null, 2));
+      console.log('Game DSL:', JSON.stringify(gameDsl, null, 2));
 
       // Guardar datos en sessionStorage para pasarlos a la página de juego
       sessionStorage.setItem('currentGameData', JSON.stringify({

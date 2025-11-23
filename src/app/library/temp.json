@@ -1,0 +1,42 @@
+[
+  {
+      "asset_id": "6d5f3b3b-1f9b-4781-98f4-582972f258d4",
+      "name": "rey",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/rey.png"
+  },
+  {
+      "asset_id": "86648113-5acc-49fa-a7b9-9563f93bd84d",
+      "name": "princesa",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/princesa.png"
+  },
+  {
+      "asset_id": "08fa5275-ed8f-49fc-9c8e-a6b63eb5cc3a",
+      "name": "ogro",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/ogro.png"
+  },
+  {
+      "asset_id": "abc43ca0-4b9b-4492-a400-c258d0dfa8da",
+      "name": "botas",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/botas.png"
+  },
+  {
+      "asset_id": "a18965cc-c82a-4b42-98d9-188c90dc69e6",
+      "name": "bolsa",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/bolsa.png"
+  },
+  {
+      "asset_id": "3c376aef-0a7e-4a81-8f83-af4e92145c50",
+      "name": "bg_forest_clearing",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/bg_forest_clearing.png"
+  },
+  {
+      "asset_id": "c05f6755-a836-43d4-8b71-59fd5bc75621",
+      "name": "bg_riverbank",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/bg_riverbank.png"
+  },
+  {
+      "asset_id": "fedff3b1-5053-48ca-9410-bafdff6e68fc",
+      "name": "bg_castle_exterior",
+      "image_url": "https://fvskofzzinfydpebayih.supabase.co/storage/v1/object/public/characters/perrault-charles-el-gato-con-botas/bg_castle_exterior.png"
+  }
+]
