@@ -35,7 +35,7 @@ export function Header() {
     <nav className="flex flex-col gap-4 pt-10">
       <Link href="/" className="mb-4 flex items-center justify-center gap-2">
         <span className="font-headline text-2xl font-bold text-primary">
-          Kippu Tales
+          Cuenti
         </span>
       </Link>
       {navLinks.map((link) => (
@@ -59,7 +59,7 @@ export function Header() {
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between">
         <Link href="/" className="flex items-center gap-2">
           <span className="font-headline text-2xl font-bold text-primary">
-            Kippu Tales
+            Cuenti
           </span>
         </Link>
 

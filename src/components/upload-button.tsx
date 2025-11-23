@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react'; // Agregamos useRef por si se necesita para algo, aunque no es crítico aquí
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -8,106 +8,210 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogTrigger, // ¡Importante! Añadir DialogTrigger
+  DialogTrigger,
 } from '@/components/ui/dialog';
-import { UploadCloud, Loader2, FileText } from 'lucide-react';
+import { UploadCloud, Loader2, FileSearch } from 'lucide-react'; 
 import { useRouter } from 'next/navigation';
+
+// Importación del SDK de Supabase
+import { createClient } from '@supabase/supabase-js';
+
+// Inicialización del cliente Supabase (Cliente/Browser)
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+// Verificamos y creamos el cliente
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("Supabase environment variables are missing.");
+}
+const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+
 
 export function UploadButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isGeneratingAssets, setIsGeneratingAssets] = useState(false); // Nuevo estado
   const [fileName, setFileName] = useState<string | null>(null);
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null); // Todavía útil para el input de archivo
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelect = async (file: File | null) => {
-    if (file && file.type === 'text/plain') {
-      setFileName(file.name);
-      setIsUploading(true);
-
-      const fileReader = new FileReader();
-      fileReader.readAsText(file, 'UTF-8');
-
-      fileReader.onload = async (e) => {
-        const content = e.target?.result as string;
-
-        setIsUploading(false);
-        setIsAnalyzing(true);
-
-        const storyId = file.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace('.txt', '');
-
-        // Usar setTimeout para simular el tiempo de análisis
-        setTimeout(() => {
-          setIsAnalyzing(false);
-          setIsOpen(false); // Cierra el diálogo al finalizar
-          setFileName(null);
-          
-          const queryParams = new URLSearchParams({ content });
-          router.push(`/story/${storyId}?${queryParams.toString()}`);
-        }, 3000);
-      };
-
-      fileReader.onerror = () => {
-        console.error("Failed to read file");
-        alert("Failed to read file. Please try again."); // Feedback al usuario
-        resetState();
-      }
-    } else {
-      alert("Please upload a .txt file.");
-      resetState();
-    }
-    // Siempre resetear el input del archivo para permitir subir el mismo archivo de nuevo
+  /**
+   * Restablece todos los estados del componente a su valor inicial.
+   */
+  const resetState = () => {
+    setIsOpen(false);
+    setIsUploading(false);
+    setIsGeneratingAssets(false);
+    setFileName(null);
     if (fileInputRef.current) {
         fileInputRef.current.value = '';
     }
+  }
+
+  /**
+   * Maneja la selección y procesamiento del archivo (TXT o PDF).
+   */
+  const handleFileSelect = async (file: File | null) => {
+    if (!file) {
+      resetState();
+      return;
+    }
+
+    const isTxt = file.type === 'text/plain' || file.name.endsWith('.txt');
+    const isPdf = file.type === 'application/pdf' || file.name.endsWith('.pdf');
+
+    if (!isTxt && !isPdf) {
+      alert("Por favor, sube un archivo .txt o .pdf.");
+      resetState();
+      return;
+    }
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+        alert("Error de configuración: Las claves de Supabase no están disponibles.");
+        resetState();
+        return;
+    }
+
+    setFileName(file.name);
+    setIsUploading(true);
+    setIsOpen(true);
+
+    try {
+      const fileNameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+      const storyId = fileNameWithoutExt.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      let textContent = '';
+      
+      const storagePath = `stories/${storyId}-${Date.now()}.${isPdf ? 'pdf' : 'txt'}`;
+
+      if (isTxt) {
+        textContent = await new Promise<string>((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = (e) => resolve(e.target?.result as string);
+          fileReader.onerror = reject;
+          fileReader.readAsText(file, 'UTF-8');
+        });
+      } else if (isPdf) {
+        setIsUploading(true);
+        const { error: uploadError } = await supabase.storage
+          .from('cuentos')
+          .upload(storagePath, file, {
+            cacheControl: '3600',
+            upsert: false,
+          });
+
+        if (uploadError) {
+          throw new Error(`Error al subir a Storage: ${uploadError.message}`);
+        }
+      }
+      
+      // 1. LLAMADA A LA FUNCIÓN 1: PROCESAMIENTO DE TEXTO Y GENERACIÓN DE JSON RPG
+      setIsUploading(false);
+      setIsGeneratingAssets(true); // Cambiamos el estado de carga/análisis
+      
+      const EDGE_FUNCTION_NAME_1 = 'process-story'; 
+      const edgeFunctionUrl1 = `${supabaseUrl}/functions/v1/${EDGE_FUNCTION_NAME_1}`;
+
+      const processResponse = await fetch(edgeFunctionUrl1, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseAnonKey}` 
+        },
+        body: JSON.stringify({ 
+            filePath: storagePath, 
+            storyId: storyId, 
+            isPdf: isPdf,
+            textContent: isTxt ? textContent : null
+        }),
+      });
+
+      if (!processResponse.ok) {
+        const errorData = await processResponse.json();
+        throw new Error(errorData.error || 'Error en el Paso 1 (Texto/JSON RPG).');
+      }
+
+      const { text: processedText, rpg_data } = await processResponse.json();
+      
+      // 2. LLAMADA A LA FUNCIÓN 2: GENERACIÓN DE PROMPTS Y ALMACENAMIENTO DE ASSETS
+      // Utilizamos los datos devueltos por la primera función.
+      
+      const EDGE_FUNCTION_NAME_2 = 'generate-asset-prompts'; 
+      const edgeFunctionUrl2 = `${supabaseUrl}/functions/v1/${EDGE_FUNCTION_NAME_2}`;
+
+      const assetResponse = await fetch(edgeFunctionUrl2, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseAnonKey}` 
+        },
+        body: JSON.stringify({
+            story_id: storyId, 
+            rpg_assets_json: rpg_data // Pasamos el JSON generado
+        }),
+      });
+      
+      if (!assetResponse.ok) {
+        const errorData = await assetResponse.json();
+        throw new Error(errorData.error || 'Error en el Paso 2 (Generación de Prompts).');
+      }
+      
+      // Opcional: Obtener los prompts generados para logging o feedback.
+      // const assetResults = await assetResponse.json(); 
+      
+      // --- NAVEGACIÓN ---
+      // Si la segunda función terminó (lo que implica que las URLs están en la DB), navegamos.
+      
+      setTimeout(() => {
+        setIsGeneratingAssets(false);
+        setIsOpen(false);
+        setFileName(null);
+        
+        router.push(`/story/${storyId}`);
+      }, 1000); // Reducimos la simulación de tiempo
+
+    } catch (error) {
+      console.error("Error al procesar el archivo:", error);
+      alert(`Error crítico en el pipeline: ${error instanceof Error ? error.message : "Error desconocido"}`);
+      resetState();
+    }
   };
 
+  /**
+   * Manejador para el input de archivo estándar.
+   */
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleFileSelect(event.target.files?.[0] || null);
   };
 
+  // Funciones de Drag and Drop (sin cambios)
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    event.currentTarget.classList.add('border-primary', 'bg-accent'); // Resaltar área de drop
+    event.currentTarget.classList.add('border-primary', 'bg-accent');
   };
 
   const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.currentTarget.classList.remove('border-primary', 'bg-accent'); // Quitar resaltado
+    event.currentTarget.classList.remove('border-primary', 'bg-accent');
   };
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    event.currentTarget.classList.remove('border-primary', 'bg-accent'); // Quitar resaltado
+    event.currentTarget.classList.remove('border-primary', 'bg-accent');
     handleFileSelect(event.dataTransfer.files?.[0] || null);
   };
-
-  const resetState = () => {
-    setIsOpen(false);
-    setIsUploading(false);
-    setIsAnalyzing(false);
-    setFileName(null);
-  }
-
-  // Si está cargando o analizando, el diálogo de progreso debería bloquear la interacción
-  // Se mostrará un diálogo diferente o una superposición.
-  // El estado de `isOpen` controla el diálogo principal.
 
   return (
     <>
       <Dialog open={isOpen} onOpenChange={(open) => {
-        // Solo resetear si el diálogo se cierra y no estamos en medio de una carga/análisis
-        if (!open && !isUploading && !isAnalyzing) {
+        if (!open && !isUploading && !isGeneratingAssets) { // Usamos el nuevo estado
           resetState();
-        } else {
-          setIsOpen(open); // Abrir/cerrar normalmente
+        } else if (open) {
+          setIsOpen(open);
         }
       }}>
         <DialogTrigger asChild>
-          {/* Este es el botón que se queda donde lo coloques */}
-          {/* Se han quitado las clases 'fixed', 'bottom-6', 'right-6', 'z-40' */}
           <Button
-            className="h-12 px-6 rounded-lg shadow-md bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2" // Estilo más de botón normal
+            className="h-12 px-6 rounded-lg shadow-md bg-primary text-primary-foreground hover:bg-primary/90 flex items-center gap-2"
+            onClick={() => setIsOpen(true)}
           >
             <UploadCloud size={20} />
             Añadir Nuevo Cuento
@@ -118,36 +222,29 @@ export function UploadButton() {
           <DialogHeader>
             <DialogTitle>Sube tu Cuento</DialogTitle>
             <DialogDescription>
-              Arrastra y suelta tu archivo .txt o haz clic para buscar.
+              Arrastra y suelta tu archivo **.txt o .pdf**, o haz clic para buscar.
             </DialogDescription>
           </DialogHeader>
           <div className="p-4">
-            {isUploading || isAnalyzing ? (
+            {isUploading || isGeneratingAssets ? ( // Mostramos el estado de carga unificado
               <div className="flex flex-col items-center justify-center gap-4 text-center">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
                 <p className="font-semibold">
-                  {isUploading ? 'Leyendo archivo...' : 'Analizando cuento...'}
+                  {isUploading 
+                    ? 'Subiendo y extrayendo texto...' 
+                    : 'Generando prompts de imagen con IA...'}
                 </p>
                 <p className="text-sm text-muted-foreground">{fileName}</p>
-                {isAnalyzing && (
+                {isGeneratingAssets && (
                   <div className="w-full text-left text-sm text-muted-foreground mt-2">
-                    <p
-                      className="animate-pulse"
-                      style={{ animationDelay: '0.2s' }}
-                    >
-                      Escaneando capítulos...
+                    <p className="animate-pulse" style={{ animationDelay: '0.2s' }}>
+                      Analizando elementos de RPG...
                     </p>
-                    <p
-                      className="animate-pulse"
-                      style={{ animationDelay: '0.7s' }}
-                    >
-                      Identificando personajes...
+                    <p className="animate-pulse" style={{ animationDelay: '0.7s' }}>
+                      Creando descripciones visuales...
                     </p>
-                    <p
-                      className="animate-pulse"
-                      style={{ animationDelay: '1.2s' }}
-                    >
-                      Mapeando escenarios...
+                    <p className="animate-pulse" style={{ animationDelay: '1.2s' }}>
+                      Almacenando recetas de arte en DB...
                     </p>
                   </div>
                 )}
@@ -155,19 +252,17 @@ export function UploadButton() {
             ) : (
               <div
                 onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave} // Añadido
+                onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()} // Haz clic en el área para abrir el selector
+                onClick={() => fileInputRef.current?.click()}
                 className="relative flex cursor-pointer flex-col items-center justify-center gap-4 rounded-lg border-2 border-dashed border-border p-12 text-center transition-colors hover:border-primary hover:bg-accent"
               >
-                <FileText className="h-12 w-12 text-muted-foreground" />
-                <p className="font-semibold">Arrastra y suelta un archivo .txt aquí</p>
+                <FileSearch className="h-12 w-12 text-muted-foreground" />
+                <p className="font-semibold">Arrastra y suelta un archivo **.txt o .pdf** aquí</p>
                 <p className="text-sm text-muted-foreground">o</p>
-                {/* El botón interno de "Browse Files" ya no es necesario si el div completo es clickeable */}
-                {/* <Button variant="default">Browse Files</Button> */}
                 <input
                   type="file"
-                  accept=".txt"
+                  accept=".txt,.pdf"
                   onChange={handleFileChange}
                   ref={fileInputRef}
                   className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
