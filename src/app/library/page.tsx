@@ -219,14 +219,6 @@ const stories = [
     gameDsl: null,
     assetUrls: null,
   },
-  {
-    id: 'three-little-pigs',
-    title: 'Los Tres Cerditos',
-    imageUrl: '/img/cerdo.png',
-    category: 'Cuentos Clásicos',
-    gameDsl: null,
-    assetUrls: null,
-  },
 ];
 
 export default function LibraryPage() {
