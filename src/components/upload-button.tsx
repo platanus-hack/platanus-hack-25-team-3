@@ -10,7 +10,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { UploadCloud, Loader2, FileSearch } from 'lucide-react'; 
+import { UploadCloud, Loader2, FileSearch } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // Importación del SDK de Supabase
@@ -80,7 +80,7 @@ export function UploadButton() {
       const fileNameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
       const storyId = fileNameWithoutExt.toLowerCase().replace(/[^a-z0-9]+/g, '-');
       let textContent = '';
-      
+
       const storagePath = `stories/${storyId}-${Date.now()}.${isPdf ? 'pdf' : 'txt'}`;
 
       if (isTxt) {
@@ -103,23 +103,23 @@ export function UploadButton() {
           throw new Error(`Error al subir a Storage: ${uploadError.message}`);
         }
       }
-      
+
       // 1. LLAMADA A LA FUNCIÓN 1: PROCESAMIENTO DE TEXTO Y GENERACIÓN DE JSON RPG
       setIsUploading(false);
       setIsGeneratingAssets(true); // Cambiamos el estado de carga/análisis
-      
-      const EDGE_FUNCTION_NAME_1 = 'process-story'; 
+
+      const EDGE_FUNCTION_NAME_1 = 'process-story';
       const edgeFunctionUrl1 = `${supabaseUrl}/functions/v1/${EDGE_FUNCTION_NAME_1}`;
 
       const processResponse = await fetch(edgeFunctionUrl1, {
         method: 'POST',
-        headers: { 
+        headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabaseAnonKey}` 
+            'Authorization': `Bearer ${supabaseAnonKey}`
         },
-        body: JSON.stringify({ 
-            filePath: storagePath, 
-            storyId: storyId, 
+        body: JSON.stringify({
+            filePath: storagePath,
+            storyId: storyId,
             isPdf: isPdf,
             textContent: isTxt ? textContent : null
         }),
@@ -131,42 +131,75 @@ export function UploadButton() {
       }
 
       const { text: processedText, rpg_data } = await processResponse.json();
-      
-      // 2. LLAMADA A LA FUNCIÓN 2: GENERACIÓN DE PROMPTS Y ALMACENAMIENTO DE ASSETS
-      // Utilizamos los datos devueltos por la primera función.
-      
-      const EDGE_FUNCTION_NAME_2 = 'generate-asset-prompts'; 
+
+      // 2. LLAMADAS PARALELAS: GENERACIÓN DE PROMPTS Y CREACIÓN DEL DSL DE JUEGO
+      // Ambas funciones pueden ejecutarse en paralelo ya que no dependen una de la otra.
+
+      const EDGE_FUNCTION_NAME_2 = 'generate-asset-prompts';
       const edgeFunctionUrl2 = `${supabaseUrl}/functions/v1/${EDGE_FUNCTION_NAME_2}`;
 
-      const assetResponse = await fetch(edgeFunctionUrl2, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabaseAnonKey}` 
-        },
-        body: JSON.stringify({
-            story_id: storyId, 
-            rpg_assets_json: rpg_data // Pasamos el JSON generado
+      const EDGE_FUNCTION_NAME_3 = 'create-game-dsl';
+      const edgeFunctionUrl3 = `${supabaseUrl}/functions/v1/${EDGE_FUNCTION_NAME_3}`;
+
+      // Ejecutar ambas llamadas en paralelo
+      const [assetResponse, dslResponse] = await Promise.all([
+        fetch(edgeFunctionUrl2, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${supabaseAnonKey}`
+          },
+          body: JSON.stringify({
+              story_id: storyId,
+              rpg_assets_json: rpg_data
+          }),
         }),
-      });
-      
+        fetch(edgeFunctionUrl3, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${supabaseAnonKey}`
+          },
+          body: JSON.stringify({
+              storyId: storyId,
+              text: processedText,
+              rpg_data: rpg_data
+          }),
+        })
+      ]);
+
       if (!assetResponse.ok) {
         const errorData = await assetResponse.json();
         throw new Error(errorData.error || 'Error en el Paso 2 (Generación de Prompts).');
       }
-      
-      // Opcional: Obtener los prompts generados para logging o feedback.
-      // const assetResults = await assetResponse.json(); 
-      
+
+      if (!dslResponse.ok) {
+        const errorData = await dslResponse.json();
+        throw new Error(errorData.error || 'Error en el Paso 2 (Creación del DSL de Juego).');
+      }
+
+      // Obtener los resultados de ambas llamadas
+      const { asset_urls } = await assetResponse.json();
+      const dslData = await dslResponse.json();
+      const gameDsl = dslData.game_json; // Extract game_json from response
+
+      console.log({ asset_urls, gameDsl })
+
+      // Guardar datos en sessionStorage para pasarlos a la página de juego
+      sessionStorage.setItem('currentGameData', JSON.stringify({
+        assetUrls: asset_urls,
+        gameDsl: gameDsl
+      }));
+
       // --- NAVEGACIÓN ---
-      // Si la segunda función terminó (lo que implica que las URLs están en la DB), navegamos.
-      
+      // Navegar a la página del juego
+
       setTimeout(() => {
         setIsGeneratingAssets(false);
         setIsOpen(false);
         setFileName(null);
-        
-        router.push(`/story/${storyId}`);
+
+        router.push(`/play`);
       }, 1000); // Reducimos la simulación de tiempo
 
     } catch (error) {
@@ -230,8 +263,8 @@ export function UploadButton() {
               <div className="flex flex-col items-center justify-center gap-4 text-center">
                 <Loader2 className="h-12 w-12 animate-spin text-primary" />
                 <p className="font-semibold">
-                  {isUploading 
-                    ? 'Subiendo y extrayendo texto...' 
+                  {isUploading
+                    ? 'Subiendo y extrayendo texto...'
                     : 'Generando prompts de imagen con IA...'}
                 </p>
                 <p className="text-sm text-muted-foreground">{fileName}</p>
