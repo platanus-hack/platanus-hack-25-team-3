@@ -55,25 +55,16 @@ export default function LibraryPage() {
     >
       <div className="container mx-auto max-w-6xl p-4 md:p-8">
         {/* Banner de la biblioteca */}
-        <div className="relative mb-8 h-48 w-full overflow-hidden rounded-2xl md:h-64 shadow-lg"> {/* Añadimos sombra */}
-          <Image
-            src="/img/biblioteca.png" // Asegúrate que esta imagen exista
-            alt="Banner de la biblioteca de cuentos"
-            fill
-            className="object-cover"
-            data-ai-hint="kids reading books"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-4"> {/* Añadido padding */}
-            <h1 className="text-3xl font-bold md:text-5xl drop-shadow-lg"> {/* Ajuste de tamaño y sombra de texto */}
-              Cuenti
-            </h1>
-            <p className="mt-2 text-lg md:text-xl drop-shadow-md">
-              Un mundo de aventuras te espera
-            </p>
-          </div>
-        </div>
+        <div className="relative mb-8 w-full overflow-hidden rounded-2xl h-80">
+          <Image
+            src="/img/logo.jpg"
+            alt="Banner de la biblioteca de cuentos"
+            fill
+            className="object-contain" // ¡Cambiado de 'object-cover' a 'object-contain'!
+            data-ai-hint="kids reading books"
+            priority
+          />
+        </div>
 
         {/* --- NUEVA UBICACIÓN DEL BOTÓN AÑADIR NUEVO --- */}
         <div className="mb-6 flex justify-end"> {/* Ajusta justificación para el botón */}
